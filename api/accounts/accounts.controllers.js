@@ -26,17 +26,27 @@ exports.accountDelete = (req, res) => {
     res.status(404).json({ message: "Account not found" });
   }
 };
+///////update
 
-exports.accountUpdate = (req, res) => {
-  const { accountId } = req.params;
-  const foundAccount = accounts.find((account) => account.id === +accountId);
-  if (foundAccount) {
-    foundAccount.funds = req.body.funds;
-    res.status(204).end();
-  } else {
+exports.accountUpdate = async (req, res) => {
+  try {
+    const foundAccount = await Account.findById(accountId);
+    const updatedAccount = await foundAccount.updateOne(req.body);
+    // if (foundAccount == )
+    return res.status(204).end();
+  } catch (error) {
     res.status(404).json({ message: "Account not found" });
+}
   }
 };
+const { accountId } = req.params;
+const foundAccount = accounts.find((account) => account.id === +accountId);
+if (foundAccount) {
+  foundAccount.funds = req.body.funds;
+  res.status(204).end();
+} else {
+  res.status(404).json({ message: "Account not found" });
+}
 
 ///////// Accounts List :
 exports.accountsGet = async (req, res) => {
